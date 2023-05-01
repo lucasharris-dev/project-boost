@@ -5,18 +5,25 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    [SerializeField] float boostSpeed = 1000f;
+    [SerializeField] float forwardThrust = 1000f; // boostSpeed
     [SerializeField] float rotationThrust = 150f; // rotationSpeed
 
     Rigidbody myRigidbody;
 
-    // Start is called before the first frame update
-    void Start()
+    // putting references to components on the SAME object as this script in awake
+       // is fine, and maybe better, because the references will be assigned as soon
+       // as the parent object is enabled (in this case as soon as the scene loads),
+       // so any lag will occur at the beginning, and could be hidden as load time
+    void Awake()
     {
-        myRigidbody = GetComponent<Rigidbody>();
+        myRigidbody = GetComponent<Rigidbody>(); // could also be in start
     }
 
-    // Update is called once per frame
+    void Start()
+    {
+        
+    }
+
     void Update()
     {
         ProcessThrust();
@@ -31,7 +38,7 @@ public class Movement : MonoBehaviour
         bool boosting = Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.W);
         if (boosting)
         {
-            myRigidbody.AddRelativeForce(Vector3.up * boostSpeed * Time.deltaTime); // same as new Vector3(0f, boostSpeed, 0f)
+            myRigidbody.AddRelativeForce(Vector3.up * forwardThrust * Time.deltaTime); // same as new Vector3(0f, forwardThrust, 0f)
             Debug.Log("Boosting");
         }
     }
@@ -53,9 +60,11 @@ public class Movement : MonoBehaviour
         }
     }
 
-    void ApplyRotation(float rotationDirection)
+    //  could also do myRigidbody.AddRelativeTorque, but it's more difficult to control
+    void ApplyRotation(float currentRotation)
     {
-        transform.Rotate(Vector3.forward * rotationDirection * Time.deltaTime);// same as new Vector3 (0f, 0f, 1f)
-        //myRigidbody.AddRelativeTorque(Vector3.forward * rotationDirection * Time.deltaTime); // more difficult to control
+        myRigidbody.freezeRotation = true; // freezing rotation so we can manually rotate
+        transform.Rotate(Vector3.forward * currentRotation * Time.deltaTime);// same as new Vector3 (0f, 0f, 1f);
+        myRigidbody.freezeRotation = false; // unfreezing rotation so the physics system can take over
     }
 }
