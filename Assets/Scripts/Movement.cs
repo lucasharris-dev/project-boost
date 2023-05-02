@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
@@ -9,6 +6,7 @@ public class Movement : MonoBehaviour
     [SerializeField] float rotationThrust = 150f; // rotationSpeed
 
     Rigidbody myRigidbody;
+    AudioSource myAudioSource;
 
     // putting references to components on the SAME object as this script in awake
        // is fine, and maybe better, because the references will be assigned as soon
@@ -16,12 +14,9 @@ public class Movement : MonoBehaviour
        // so any lag will occur at the beginning, and could be hidden as load time
     void Awake()
     {
-        myRigidbody = GetComponent<Rigidbody>(); // could also be in start
-    }
-
-    void Start()
-    {
-        
+        // component references could also be in start
+        myRigidbody = GetComponent<Rigidbody>();
+        myAudioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -39,7 +34,15 @@ public class Movement : MonoBehaviour
         if (boosting)
         {
             myRigidbody.AddRelativeForce(Vector3.up * forwardThrust * Time.deltaTime); // same as new Vector3(0f, forwardThrust, 0f)
-            Debug.Log("Boosting");
+            if (!myAudioSource.isPlaying)
+            {
+                myAudioSource.Play();
+            }
+            // Debug.Log("Boosting");
+        }
+        else
+        {
+            myAudioSource.Stop();
         }
     }
 
