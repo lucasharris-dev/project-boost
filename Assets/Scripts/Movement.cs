@@ -4,6 +4,7 @@ public class Movement : MonoBehaviour
 {
     [SerializeField] float forwardThrust = 1000f; // boostSpeed
     [SerializeField] float rotationThrust = 150f; // rotationSpeed
+    [SerializeField] AudioClip engineSound;
 
     Rigidbody myRigidbody;
     AudioSource myAudioSource;
@@ -36,7 +37,7 @@ public class Movement : MonoBehaviour
             myRigidbody.AddRelativeForce(Vector3.up * forwardThrust * Time.deltaTime); // same as new Vector3(0f, forwardThrust, 0f)
             if (!myAudioSource.isPlaying)
             {
-                myAudioSource.Play();
+                myAudioSource.PlayOneShot(engineSound);
             }
             // Debug.Log("Boosting");
         }
