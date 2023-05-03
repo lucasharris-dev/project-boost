@@ -36,24 +36,15 @@ public class Movement : MonoBehaviour
     void ProcessThrust()
     {
         bool boosting = Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.W);
+        // Refactored using Extract (CTRL+.)
+        // Also, you can rename all instanced using CTRL+F2
         if (boosting)
         {
-            myRigidbody.AddRelativeForce(Vector3.up * forwardThrust * Time.deltaTime); // same as new Vector3(0f, forwardThrust, 0f)
-            
-            if (!myAudioSource.isPlaying)
-            {
-                myAudioSource.PlayOneShot(engineSound);
-            }
-
-            if (!mainBoosterParticles.isPlaying)
-            {
-                mainBoosterParticles.Play();
-            }
+            BeginThrusting();
         }
         else
         {
-            myAudioSource.Stop();
-            mainBoosterParticles.Stop();
+            StopThrusting();
         }
     }
 
@@ -64,27 +55,63 @@ public class Movement : MonoBehaviour
 
         if (rotatingLeft)
         {
-            ApplyRotation(rotationThrust);
-
-            if (!rightBoosterParticles.isPlaying)
-            {
-                rightBoosterParticles.Play();
-            }
+            RotateLeft();
         }
         else if (rotatingRight)
         {
-            ApplyRotation(-rotationThrust);
-
-            if (!leftBoosterParticles.isPlaying)
-            {
-                leftBoosterParticles.Play();
-            }
+            RotateRight();
         }
         else
         {
-            rightBoosterParticles.Stop();
-            leftBoosterParticles.Stop();
+            StopRotating();
         }
+    }
+
+    void BeginThrusting()
+    {
+        myRigidbody.AddRelativeForce(Vector3.up * forwardThrust * Time.deltaTime); // same as new Vector3(0f, forwardThrust, 0f)
+
+        if (!myAudioSource.isPlaying)
+        {
+            myAudioSource.PlayOneShot(engineSound);
+        }
+
+        if (!mainBoosterParticles.isPlaying)
+        {
+            mainBoosterParticles.Play();
+        }
+    }
+
+    void StopThrusting()
+    {
+        myAudioSource.Stop();
+        mainBoosterParticles.Stop();
+    }
+
+    void RotateLeft()
+    {
+        ApplyRotation(rotationThrust);
+
+        if (!rightBoosterParticles.isPlaying)
+        {
+            rightBoosterParticles.Play();
+        }
+    }
+
+    void RotateRight()
+    {
+        ApplyRotation(-rotationThrust);
+
+        if (!leftBoosterParticles.isPlaying)
+        {
+            leftBoosterParticles.Play();
+        }
+    }
+
+    void StopRotating()
+    {
+        rightBoosterParticles.Stop();
+        leftBoosterParticles.Stop();
     }
 
     //  could also do myRigidbody.AddRelativeTorque, but it's more difficult to control

@@ -19,20 +19,56 @@ public class CollisionHandler : MonoBehaviour
     const string reloadLevelFunctionString = "ReloadLevel";
     bool isTransitioning = false;
     bool hasEndSoundPlayed = false;
+    bool isCollisionDisabled = false;
 
     void Awake()
     {
         myAudioSource = GetComponent<AudioSource>();
     }
 
+    void Update()
+    {
+        RespondToDebugKeys();
+    }
+
+    void RespondToDebugKeys()
+    {
+        ForceNextLevel();
+        DisableCollision();
+    }
+
+    void ForceNextLevel()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadNextLevel();
+        }
+    }
+
+    void DisableCollision()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            if (isCollisionDisabled == true)
+            {
+                isCollisionDisabled = false;
+            }
+            else
+            {
+                isCollisionDisabled = true;
+            }
+        }
+    }
+
     void OnCollisionEnter(Collision other) // in C#, if public isn't given, then it can be assumed that this is private
     {
-        if (isTransitioning)
+        if (isTransitioning || isCollisionDisabled)
         {
             return;
         }
 
         // switch statements are faster and more efficient than if/else, especially if there are many cases
+        // i will probably only do this is there are more than 5 cases/nested if statements
         switch(other.gameObject.tag)
         {
             case "Friendly":
