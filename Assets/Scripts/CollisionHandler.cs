@@ -5,6 +5,7 @@ public class CollisionHandler : MonoBehaviour
 {
     // PARAMETERS - for tuning, typically set in the editor
     [SerializeField] float loadDelay = 1f;
+
     [SerializeField] AudioClip successSound;
     [SerializeField] AudioClip explosionSound;
     [SerializeField] ParticleSystem successParticles;
@@ -39,11 +40,9 @@ public class CollisionHandler : MonoBehaviour
                 break;
             case "Finish":
                 StartTransitionSequence(nextLevelFunctionString);
-                Debug.Log("Finish");
                 break;
             default:
                 StartTransitionSequence(reloadLevelFunctionString);
-                Debug.Log("Crash!");
                 break;
         }
     }
