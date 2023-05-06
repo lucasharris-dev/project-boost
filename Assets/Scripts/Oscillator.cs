@@ -6,7 +6,7 @@ public class Oscillator : MonoBehaviour
 {
     Vector3 startingPosition;
     [SerializeField] Vector3 movementVector = new Vector3(0f, -15f, 0f);
-    [SerializeField] float period = 2f;
+    [SerializeField] float period = 5f;
 
     float movementFactor;
 
